@@ -1,0 +1,49 @@
+ul {
+    list-style: none;
+    padding: 0;
+    border: 1px solid black;
+  }
+  
+  li {
+    display: grid;
+    grid-template-columns: 5% 15% 80%;
+    
+    div {
+      border: 1px solid black;
+    }
+  }
+  
+  .hours {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+  
+    div {
+      text-align: center;
+      position: relative;
+    }
+  
+    // div:nth-child(3n)::after{
+    //   content: '';
+    //   position: absolute;
+    //   width: 120%;
+    //   height: 100%;
+    //   left: 0;
+    //   background-color: green;
+    // }
+  }
+  
+  // .hours:nth-child(4){
+  //   background-color: hotpink;
+  // }
+  
+  .hour {
+    position: relative;
+  }
+  
+  .event {
+    position: absolute;
+    height: 100%;
+    width: 110%;
+    left: 0;
+    background-color: indigo;
+  }
