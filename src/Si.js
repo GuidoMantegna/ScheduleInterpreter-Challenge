@@ -109,7 +109,7 @@ function Si() {
   const requesterIdSelect = useRef(null);
   const serviceSelect = useRef(null);
 
-  const handleChange = (e) => {
+  const handleFilter = (e) => {
     const account = accountIdSelect.current.value,
     vendor = vendorIdSelect.current.value,
     requester = requesterIdSelect.current.value,
@@ -129,6 +129,59 @@ function Si() {
     setFilteredEvents(filteredArray)
   }
 
+  const handleSort = (e) => {
+    const {value} = e.target;
+
+    let sortedArray = [];
+
+    switch (value) {
+      case 'Oldest':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (a.apptDateTime > b.apptDateTime) { return 1 }
+          if (a.apptDateTime < b.apptDateTime) { return -1 }
+          return 0;
+        });
+        break;
+      case 'Newest':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (a.apptDateTime < b.apptDateTime) { return 1 }
+          if (a.apptDateTime > b.apptDateTime) { return -1 }
+          return 0;
+        });
+        break;
+      case 'Higher':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (Number(a.apptAccountId) < Number(b.apptAccountId)) { return 1 }
+          if (Number(a.apptAccountId) > Number(b.apptAccountId)) { return -1 }
+          return 0;
+        });
+        break;
+      case 'Lower':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (Number(a.apptAccountId) > Number(b.apptAccountId)) { return 1 }
+          if (Number(a.apptAccountId) < Number(b.apptAccountId)) { return -1 }
+          return 0;
+        });
+        break;
+      case 'A-Z':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (a.apptService > b.apptService) { return 1 }
+          if (a.apptService < b.apptService) { return -1 }
+          return 0;
+        });
+        break;
+      case 'Z-A':
+        sortedArray = filteredEvents.sort(function (a, b) {
+          if (a.apptService < b.apptService) { return 1 }
+          if (a.apptService > b.apptService) { return -1 }
+          return 0;
+        });
+        break;
+    }
+
+    setFilteredEvents(sortedArray);
+  }
+
   return (
     <>
     <div className="filters">
@@ -136,7 +189,7 @@ function Si() {
 
       <div>
         <label>apptAccountId</label>
-        <select onChange={handleChange} id="apptAccountId" ref={accountIdSelect}>
+        <select onChange={handleFilter} id="apptAccountId" ref={accountIdSelect}>
           <option>all</option>
           {apptAccountId.map(id => {
             return (
@@ -148,7 +201,7 @@ function Si() {
 
       <div>
         <label>apptVendorId</label>
-        <select onChange={handleChange} id="apptVendorId" ref={vendorIdSelect}>
+        <select onChange={handleFilter} id="apptVendorId" ref={vendorIdSelect}>
           <option>all</option>
           {apptVendorId.map(id => {
             return (
@@ -160,7 +213,7 @@ function Si() {
 
       <div>
         <label>apptRequesterId</label>
-        <select onChange={handleChange} id="apptRequesterId" ref={requesterIdSelect}>
+        <select onChange={handleFilter} id="apptRequesterId" ref={requesterIdSelect}>
           <option>all</option>
           {apptRequesterId.map(id => {
             return (
@@ -172,7 +225,7 @@ function Si() {
 
       <div>
         <label>apptService</label>
-        <select onChange={handleChange} id="apptService" ref={serviceSelect}>
+        <select onChange={handleFilter} id="apptService" ref={serviceSelect}>
           <option>all</option>
           {apptService.map(id => {
             return (
@@ -186,7 +239,25 @@ function Si() {
     <div className="sort">
       <h3>Sort</h3>
       <div>
-
+          <label>By date</label>
+          <select onChange={handleSort}>
+            <option>Oldest</option>
+            <option>Newest</option>
+          </select>
+      </div>
+      <div>
+          <label>By Account Id</label>
+          <select onChange={handleSort}>
+            <option>Lower</option>
+            <option>Higher</option>
+          </select>
+      </div>
+      <div>
+          <label>By Service</label>
+          <select onChange={handleSort}>
+            <option>A-Z</option>
+            <option>Z-A</option>
+          </select>
       </div>
     </div>
     </>
